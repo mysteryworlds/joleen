@@ -12,6 +12,21 @@ allprojects {
   apply plugin: 'checkstyle'
   apply plugin: 'jacoco'
 
+  group 'com.mysteryworlds.damocles'
+  version '1.0.0-SNAPSHOT'
+
+  repositories {
+    google()
+    mavenLocal()
+    mavenCentral()
+    maven {
+      url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    }
+    maven {
+      url = 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+  }
+
   java {
     withSourcesJar()
     withJavadocJar()
