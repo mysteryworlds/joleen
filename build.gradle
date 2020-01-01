@@ -9,7 +9,9 @@ buildScan {
 
 allprojects {
   apply plugin: 'java'
+  apply plugin: 'java-library'
   apply plugin: 'checkstyle'
+  apply plugin: 'maven-publish'
   apply plugin: 'jacoco'
 
   group 'com.mysteryworlds.joleen'
@@ -50,6 +52,35 @@ allprojects {
     ignoreFailures = false
     toolVersion '8.27'
     checkstyleTest.enabled = false
+  }
+
+
+  publishing {
+    publications {
+      maven(MavenPublication) {
+        from(components.java)
+      }
+    }
+    repositories {
+      maven {
+        name = "KlaukeEnterprisesPackages"
+        def releasesRepoUrl = 'https://repository.klauke-enterprises.com/repository/maven-releases/'
+        def snapshotsRepoUrl = 'https://repository.klauke-enterprises.com/repository/maven-snapshots/'
+        url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        credentials {
+          username = System.getenv('NEXUS_USERNAME')
+          password = System.getenv('NEXUS_PASSWORD')
+        }
+      }
+      maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/mysteryworlds")
+        credentials {
+          username = System.getenv("GITHUB_PACKAGE_REGISTRY_USER")
+          password = System.getenv("GITHUB_PACKAGE_REGISTRY_API_KEY")
+        }
+      }
+    }
   }
 }
 
